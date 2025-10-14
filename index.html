@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MemeGenie - AI Meme & Poster Creator</title>
+  <style>
+    body { font-family: 'Poppins', sans-serif; text-align: center; background: #fafafa; color: #333; margin-top: 50px; }
+    input, button { padding: 10px; margin: 10px; border-radius: 10px; border: 1px solid #ccc; }
+    #memeContainer { position: relative; display: inline-block; margin-top: 30px; }
+    #memeImage { width: 400px; border-radius: 10px; }
+    #memeCaption {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px black;
+      font-size: 22px;
+      width: 90%;
+      word-wrap: break-word;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎨 MemeGenie - AI Meme & Poster Creator</h1>
+  <input type="text" id="topic" placeholder="Enter a topic (e.g. exams, Mondays)" />
+  <button onclick="generateMeme()">Generate Meme</button>
+
+  <div id="memeContainer" style="display:none;">
+    <img id="memeImage" src="" alt="Meme">
+    <p id="memeCaption"></p>
+  </div>
+
+<script>
+async function generateMeme() {
+  const topic = document.getElementById("topic").value.trim();
+  if (!topic) {
+    alert("Please enter a topic!");
+    return;
+  }
+
+  document.getElementById("memeContainer").style.display = "block";
+  document.getElementById("memeCaption").innerText = "Generating... ⏳";
+  document.getElementById("memeImage").src = ""; // Clear previous image
+
+  try {
+    const res = await fetch("http://localhost:5001/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ topic: topic })
+    });
+
+    const data = await res.json();
+
+    // Real meme template images
+   const images = [
+  "https://i.imgflip.com/1bij.jpg",       // Distracted Boyfriend
+  "https://i.imgflip.com/26am.jpg",       // Drake Hotline Bling
+  "https://i.imgflip.com/1otk96.jpg",     // Left Exit 12 Off Ramp
+  "https://i.imgflip.com/30b1gx.jpg",     // Two Buttons
+  "https://i.imgflip.com/2fm6x.jpg",      // Expanding Brain
+  "https://i.imgflip.com/9ehk.jpg",       // UNO Draw 25
+  "https://i.imgflip.com/3si4.jpg",       // Mocking Spongebob
+  "https://i.imgflip.com/345v97.jpg",     // Woman Yelling at Cat
+  "https://i.imgflip.com/4t0m5.jpg",      // Surprised Pikachu
+  "https://i.imgflip.com/1g8my4.jpg",     // Is This A Pigeon?
+  "https://i.imgflip.com/1ur9b0.jpg"      // Gru Plan
+];
+    const randomImg = images[Math.floor(Math.random() * images.length)];
+
+    document.getElementById("memeImage").src = randomImg;
+    document.getElementById("memeCaption").innerText = data.caption;
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById("memeCaption").innerText = "Error generating meme 😢";
+  }
+}
+</script>
+</body>
+</html>
