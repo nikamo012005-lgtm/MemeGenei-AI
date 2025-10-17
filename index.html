@@ -46,7 +46,7 @@ async function generateMeme() {
   document.getElementById("memeImage").src = ""; // Clear previous image
 
   try {
-    const res = await fetch("http://localhost:5001/generate", {
+    const res = await fetch("https://memegenei-ai-2.onrender.com/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ topic: topic })
